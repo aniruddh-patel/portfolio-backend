@@ -1,0 +1,46 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: annni
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: portfolio
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: portfolio-backend
+frameworkVersion: "4"
+
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  role: arn:aws:iam::063957467941:role/LabRole
+  stage: dev
+  environment:
+    DYNAMODB_TABLE: ${self:service}-${self:provider.stage}
+
+functions:
+  submitContactForm:
+    handler: handler.submitContactForm
+    events:
+      - http:
+          path: contact
+          method: post
+          cors:
+            origins:
+              - "*"
+            headers:
+              - Content-Type
+            allowCredentials: true
+
+resources:
+  Resources:
+    ContactFormTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+        AttributeDefinitions:
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: email
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
