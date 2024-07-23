@@ -14,6 +14,7 @@ provider:
   stage: dev
   environment:
     DYNAMODB_TABLE: ${self:service}-${self:provider.stage}
+    SNS_TOPIC_ARN: arn:aws:sns:us-east-1:063957467941:notification
 
 functions:
   submitContactForm:
@@ -28,6 +29,8 @@ functions:
             headers:
               - Content-Type
             allowCredentials: true
+    environment:
+      SNS_TOPIC_ARN: ${self:provider.environment.SNS_TOPIC_ARN}
 
 resources:
   Resources:
