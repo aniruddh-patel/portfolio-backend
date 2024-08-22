@@ -10,11 +10,11 @@ frameworkVersion: "4"
 provider:
   name: aws
   runtime: nodejs20.x
-  role: arn:aws:iam::063957467941:role/LabRole
+  role: arn:aws:iam::749634721382:role/LabRole
   stage: dev
   environment:
     DYNAMODB_TABLE: ${self:service}-${self:provider.stage}
-    SNS_TOPIC_ARN: arn:aws:sns:us-east-1:063957467941:notification
+    SNS_TOPIC_ARN: arn:aws:sns:us-east-1:749634721382:notification
 
 functions:
   submitContactForm:
